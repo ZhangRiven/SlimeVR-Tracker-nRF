@@ -64,6 +64,13 @@ static const struct pwm_dt_spec clk_out = PWM_DT_SPEC_GET(CLKOUT_NODE);
 static const struct pwm_dt_spec clk_out = {0};
 #endif
 
+#if DT_NODE_HAS_PROP(ZEPHYR_USER_NODE, imu_ldo_en_gpios)
+#define IMU_LDO_EN_EXISTS true
+static const struct gpio_dt_spec imu_ldo_en = GPIO_DT_SPEC_GET(ZEPHYR_USER_NODE, imu_ldo_en_gpios);
+#else
+#pragma message "IMU LDO enable GPIO does not exist"
+#endif
+
 #define DFU_EXISTS CONFIG_BUILD_OUTPUT_UF2 || CONFIG_BOARD_HAS_NRF5_BOOTLOADER
 #define ADAFRUIT_BOOTLOADER CONFIG_BUILD_OUTPUT_UF2
 #define NRF5_BOOTLOADER CONFIG_BOARD_HAS_NRF5_BOOTLOADER
@@ -391,6 +398,10 @@ static int sys_gpio_init(void)
 #endif
 #if LDO_EN_EXISTS
 	gpio_pin_configure_dt(&ldo_en, GPIO_OUTPUT);
+#endif
+#if IMU_LDO_EN_EXISTS
+	gpio_pin_configure_dt(&imu_ldo_en, GPIO_OUTPUT);
+	gpio_pin_set_dt(&imu_ldo_en, 1);
 #endif
 	return 0;
 }
