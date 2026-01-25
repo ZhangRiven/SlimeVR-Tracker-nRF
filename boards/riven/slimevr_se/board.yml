@@ -1,0 +1,10 @@
+# Copyright (c) 2024 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+board:
+  name: slimevr_se
+  vendor: riven
+  socs:
+    - name: nrf52840
+      variants:
+      - name: 'spi'
