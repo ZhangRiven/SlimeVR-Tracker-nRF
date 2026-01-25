@@ -81,16 +81,16 @@
     //     };
     // };
 
-	buttons {
-		compatible = "gpio-keys";
-		button0: button_0 {
-			gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-			label = "Push button switch 0";
-		};
-	};
+	// buttons {
+	// 	compatible = "gpio-keys";
+	// 	button0: button_0 {
+	// 		gpios = <&gpio0 9 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+	// 		label = "Push button switch 0";
+	// 	};
+	// };
 
 	aliases {
-		sw0 = &button0;
+		// sw0 = &button0;
 		// pwm-led0 = &pwm_led0;
 		// pwm-led1 = &pwm_led1;
 		// pwm-led2 = &pwm_led2;
