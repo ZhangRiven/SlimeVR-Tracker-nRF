@@ -113,7 +113,7 @@
 		chg-gpios = <&gpio0 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		stby-gpios = <&gpio0 26 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		// clk-gpios = <&gpio0 8 (GPIO_OPEN_DRAIN)>; // OSC_EN
-		imu-ldo-en-gpios = <&gpio0 8 (GPIO_OPEN_DRAIN | GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		imu-ldo-en-gpios = <&gpio0 8 (GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
 	};
 };
 

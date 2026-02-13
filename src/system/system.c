@@ -379,8 +379,47 @@ static void button_thread(void)
 }
 #endif
 
+/**
+ * Function for configuring UICR_REGOUT0 register to set GPIO output voltage to (vout).
+ */
+static int32_t regout0_voltage_setup(uint32_t regout0) {
+	/* check valid of regout0 */
+	if (false ==
+		(UICR_REGOUT0_VOUT_3V3 == regout0 || UICR_REGOUT0_VOUT_3V0 == regout0 ||
+		UICR_REGOUT0_VOUT_2V7 == regout0 || UICR_REGOUT0_VOUT_2V4 == regout0 ||
+		UICR_REGOUT0_VOUT_2V1 == regout0 || UICR_REGOUT0_VOUT_1V8 == regout0)) {
+		return -1;
+	}
+
+    // configure UICR_REGOUT0 register only if it is set to default value.
+    if ((NRF_UICR->REGOUT0 & UICR_REGOUT0_VOUT_Msk) == (UICR_REGOUT0_VOUT_DEFAULT << UICR_REGOUT0_VOUT_Pos)) {
+		/* set NVMC write enable */
+        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen;
+
+		/* wait for NVMC to be ready */
+        while (NRF_NVMC->READY == NVMC_READY_READY_Busy) {}
+
+		/* set REGOUT0 value */
+        NRF_UICR->REGOUT0 = (NRF_UICR->REGOUT0 & ~((uint32_t)UICR_REGOUT0_VOUT_Msk)) | (regout0 << UICR_REGOUT0_VOUT_Pos);
+
+		/* set NVMC read only */
+        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren;
+
+		/* wait for NVMC to be ready */
+        while (NRF_NVMC->READY == NVMC_READY_READY_Busy){}
+
+        // system reset is needed to update UICR registers.
+        NVIC_SystemReset();
+    }
+	return 0;
+}
+
 static int sys_gpio_init(void)
 {
+#ifdef CONFIG_BOARD_SLIMEVR_SE
+	// set regout0 voltage to 2.7V.
+	regout0_voltage_setup(UICR_REGOUT0_VOUT_2V7);
+#endif
 #if DOCK_EXISTS // configure if exists
 	gpio_pin_configure_dt(&dock, GPIO_INPUT);
 #endif
