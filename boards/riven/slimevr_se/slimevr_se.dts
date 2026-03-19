@@ -110,6 +110,7 @@
 
 	zephyr,user {
 		int0-gpios = <&gpio0 12 0>; // IMU INT
+		mag-int-gpios = <&gpio1 0 0>; // MAG INT
 		chg-gpios = <&gpio0 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		stby-gpios = <&gpio0 26 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		// clk-gpios = <&gpio0 8 (GPIO_OPEN_DRAIN)>; // OSC_EN

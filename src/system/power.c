@@ -66,6 +66,11 @@ K_THREAD_DEFINE(power_thread_id, 1024, power_thread, NULL, NULL, NULL, POWER_THR
 #else
 #warning "IMU wake up GPIO does not exist"
 #endif
+#if DT_NODE_HAS_PROP(ZEPHYR_USER_NODE, mag_int_gpios)
+#define MAG_INT_EXISTS true
+#else
+#warning "MAG wake up GPIO does not exist"
+#endif
 #if DT_NODE_HAS_PROP(ZEPHYR_USER_NODE, dcdc_gpios)
 #define DCDC_EN_EXISTS true
 static const struct gpio_dt_spec dcdc_en = GPIO_DT_SPEC_GET(ZEPHYR_USER_NODE, dcdc_gpios);
@@ -548,6 +553,11 @@ static void power_thread(void)
 #else
 		bool usb_plugged = false;
 #endif
+
+		if (button_read())
+		{
+			(*dbl_reset_mem) = DFU_DBL_RESET_APP;
+		}
 
 		if (!device_plugged && (charging || charged || plugged || usb_plugged))
 		{
